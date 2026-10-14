@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月下 · 三恋档案</title>
+<meta name="description" content="一个人的双面月亮：病恋、虚恋。点击月亮翻开我的档案。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='38%25' cy='34%25' r='75%25'%3E%3Cstop offset='0%25' stop-color='%23FDF3DC'/%3E%3Cstop offset='55%25' stop-color='%23E9B96B'/%3E%3Cstop offset='100%25' stop-color='%23C98E4B'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%23070D1A'/%3E%3Ccircle cx='34' cy='34' r='17' fill='url(%23g)'/%3E%3Ccircle cx='29' cy='29' r='4' fill='%23C98E4B' opacity='.5'/%3E%3Ccircle cx='39' cy='39' r='3' fill='%23C98E4B' opacity='.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --ink:#060A13; --ink-1:#0A1120; --ink-2:#0E1830; --ink-3:#141F38;
+  --ivory:#F2ECDD; --mist:#93A1BD; --dim:#5E6D8B;
+  --brass:#C9A86A; --brass-hi:#E6CD9C; --brass-lo:#8A7448;
+  --bing:#B95672; --bing-hi:#E494A6; --bing-deep:#6E2E45;
+  --xu:#9B7EDB; --xu-hi:#C9B6F5; --xu-deep:#5C43A8;
+  --line:rgba(201,168,106,.16); --line-soft:rgba(201,168,106,.09);
+  --serif:"Noto Serif SC",Georgia,"Songti SC","SimSun",serif;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--ink);color:var(--ivory);
+  font-size:16px;line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(201,168,106,.42);color:#fff}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px}
+.wrap{width:100%;max-width:880px;margin:0 auto;padding:0 20px}
+
+/* 全页档案纸纹：坐标网格 + 颗粒 */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,rgba(201,168,106,.022) 0 1px,transparent 1px 54px),
+    repeating-linear-gradient(90deg,rgba(201,168,106,.022) 0 1px,transparent 1px 54px)}
+body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===== 视图切换 ===== */
+.view{display:none;min-height:100svh}
+.view.active{display:block;animation:viewIn .5s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.view-in{position:relative;z-index:2;min-height:100svh;padding:0 20px 72px}
+
+/* ===== 星空 ===== */
+.stars{position:absolute;inset:0;pointer-events:none;z-index:0}
+.stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#DCE7F7;
+  opacity:.7;animation:twinkle 4.2s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+
+/* ===== 顶部导航 · 档案头 ===== */
+.nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;
+  padding:11px 20px;background:linear-gradient(180deg,rgba(6,10,19,.96),rgba(6,10,19,.72));
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
+.nav .back{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mist);
+  border:1px solid var(--line);border-radius:6px;padding:6px 12px;letter-spacing:.08em;
+  transition:background .2s,color .2s,border-color .2s}
+.nav .back:hover{background:rgba(201,168,106,.1);color:var(--brass-hi);border-color:var(--brass)}
+.nav .back svg{width:13px;height:13px}
+.nav .tt{font-family:var(--serif);font-weight:700;font-size:14px;letter-spacing:.3em;color:var(--brass-hi);
+  text-shadow:0 0 20px rgba(201,168,106,.22)}
+.nav .fno{margin-left:auto;flex:none;font-size:9.5px;letter-spacing:.26em;color:var(--dim);
+  border:1px solid var(--line-soft);border-radius:4px;padding:4px 9px;white-space:nowrap}
+.nav[data-view="home"] .back{visibility:hidden}
+@media (max-width:460px){ .nav .fno{display:none} }
+
+/* ===== HOME：月相仪器 ===== */
+#view-home{background:
+  radial-gradient(110% 82% at 82% -12%, rgba(63,86,138,.55) 0%, transparent 55%),
+  radial-gradient(90% 62% at 8% -4%, rgba(55,46,88,.5) 0%, transparent 50%),
+  linear-gradient(180deg,#05080F 0%,#0A1120 36%,#12203C 64%,#26314F 86%,#3B3A57 100%)}
+#view-home .view-in{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px}
+.moon-btn{position:relative;z-index:2;width:min(292px,62vw);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(201,168,106,.3);background:radial-gradient(circle,rgba(201,168,106,.06),transparent 68%);
+  cursor:pointer;transition:transform .35s var(--ease)}
+.moon-btn:hover{transform:scale(1.03)}
+.moon-btn .glow{position:absolute;inset:-30px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,106,.3) 0%,rgba(201,168,106,.08) 44%,transparent 70%);
+  animation:breathe 4.6s ease-in-out infinite;pointer-events:none}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.72}50%{transform:scale(1.08);opacity:1}}
+.moon-btn svg{width:88%;height:88%;overflow:visible}
+.moon-btn svg .mfill{fill:url(#moonGrad)}
+.moon-btn svg .crate{fill:#C98E4B;opacity:.36}
+.moon-btn svg .crate2{fill:#B9792F;opacity:.28}
+.moon-btn svg .ring{fill:none;stroke:rgba(201,168,106,.5);stroke-width:.9}
+.moon-btn svg .ring2{fill:none;stroke:rgba(201,168,106,.28);stroke-width:.6}
+.moon-btn svg .cross{stroke:rgba(201,168,106,.26);stroke-width:.7;opacity:.75}
+.home-kicker{display:flex;align-items:center;gap:14px;font-size:10.5px;letter-spacing:.44em;color:var(--dim);white-space:nowrap}
+.home-kicker::before,.home-kicker::after{content:"";height:1px;width:30px;flex:none}
+.home-kicker::before{background:linear-gradient(90deg,transparent,var(--brass-lo))}
+.home-kicker::after{background:linear-gradient(90deg,var(--brass-lo),transparent)}
+.home-title{font-family:var(--serif);font-weight:900;font-size:clamp(34px,9vw,64px);letter-spacing:.16em;
+  background:linear-gradient(180deg,#FBF4E2 12%,#E6CD9C 52%,#9C7C45 94%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 34px rgba(201,168,106,.18)}
+.home-sub{font-size:14px;color:var(--mist);font-weight:300;letter-spacing:.2em}
+.home-lv{font-size:10.5px;color:var(--dim);letter-spacing:.3em}
+.home-lv b{color:var(--brass-lo);font-weight:500}
+.home-hint{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--brass-hi);
+  border:1px solid var(--line);border-radius:4px;padding:9px 20px;background:rgba(9,15,27,.6);
+  margin-top:8px;letter-spacing:.12em;transition:border-color .3s,background .3s}
+.home-hint:hover{border-color:var(--brass);background:rgba(201,168,106,.08)}
+.home-hint svg{width:14px;height:14px;animation:dip 2s ease-in-out infinite}
+@keyframes dip{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.music-note{margin-top:16px;font-size:11.5px;color:var(--dim);letter-spacing:.14em;display:flex;align-items:center;gap:8px}
+.music-note .dotp{width:7px;height:7px;border-radius:50%;background:var(--dim);flex:none}
+.music-note.playing .dotp{background:var(--brass);animation:twinkle 1.2s infinite}
+.music-note.playable{cursor:pointer}
+.music-note.playable:hover{color:var(--brass-hi)}
+
+/* ===== PROFILE：档案登记表 ===== */
+#view-profile,#view-love-bing,#view-love-xu{
+  background:
+    radial-gradient(90% 60% at 50% -8%, rgba(63,86,138,.3) 0%, transparent 55%),
+    linear-gradient(180deg,#060A13 0%,#0A1120 48%,#101A30 100%)}
+.phead{text-align:center;padding:38px 0 6px}
+.phead .pk{font-size:11px;letter-spacing:.46em;color:var(--brass)}
+.phead h2{font-family:var(--serif);font-weight:900;font-size:clamp(25px,7vw,36px);letter-spacing:.18em;margin-top:10px}
+.pcard{position:relative;margin:24px auto 0;max-width:560px;border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(16,26,46,.6),rgba(9,15,27,.45))}
+.pcard::before{content:"";position:absolute;top:8px;left:8px;width:14px;height:14px;border-top:1px solid var(--brass);border-left:1px solid var(--brass);opacity:.5;pointer-events:none}
+.pcard .row{display:grid;grid-template-columns:118px 1fr;gap:14px;padding:15px 24px;border-bottom:1px solid var(--line-soft);align-items:center}
+.pcard .row:last-child{border-bottom:none}
+.pcard .k{font-size:12.5px;color:#B49A66;letter-spacing:.24em;font-weight:500}
+.pcard .v{font-size:14.5px;color:var(--ivory);min-width:0;word-break:break-word}
+.pcard .v.placeholder{color:var(--mist);font-weight:300}
+.pcard .v b{color:var(--brass-hi);font-weight:600}
+.pnote{max-width:560px;margin:12px auto 0;font-size:11.5px;color:var(--dim);text-align:center;letter-spacing:.08em;line-height:2}
+.pnote b{color:var(--brass);font-weight:600;letter-spacing:.12em}
+.section-title{text-align:center;padding:42px 0 8px}
+.section-title .pk{font-size:11px;letter-spacing:.46em;color:var(--brass)}
+.section-title h3{font-family:var(--serif);font-weight:900;font-size:clamp(21px,6vw,30px);letter-spacing:.14em;margin-top:10px}
+.section-title p{font-size:12.5px;color:var(--mist);font-weight:300;margin-top:8px;letter-spacing:.08em}
+.love-btns{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px auto 0;max-width:560px}
+.love-btns a{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px 10px 20px;
+  border-radius:12px;border:1px solid var(--line-soft);overflow:hidden;
+  transition:transform .3s var(--ease),border-color .3s,background .3s}
+.love-btns a:hover{transform:translateY(-4px)}
+.love-btns a .halo{position:absolute;top:-46px;right:-46px;width:130px;height:130px;border-radius:50%;opacity:.14;filter:blur(26px);pointer-events:none}
+.love-btns a .case-no{position:absolute;top:10px;left:12px;font-size:9px;letter-spacing:.22em;color:var(--dim)}
+.love-btns a .lv{position:absolute;top:9px;right:10px;font-size:9px;letter-spacing:.18em;padding:2px 7px;border-radius:3px;border:1px solid var(--line-soft);color:var(--dim)}
+.love-btns a .nm{font-family:var(--serif);font-weight:900;font-size:20px;letter-spacing:.26em;margin-top:10px}
+.love-btns a .en{font-size:9.5px;letter-spacing:.32em;color:var(--dim)}
+.love-btns a .one{font-size:10.5px;color:var(--mist);font-weight:300;text-align:center;line-height:1.6;letter-spacing:.02em}
+.love-btns a.bing{border-color:rgba(185,86,114,.32)}.love-btns a.bing .halo{background:var(--bing)}
+.love-btns a.bing .nm{color:#E494A6}.love-btns a.bing .lv{border-color:rgba(185,86,114,.3);color:#D98AA0}
+.love-btns a.xu{border-color:rgba(155,126,219,.34)}.love-btns a.xu .halo{background:var(--xu)}
+.love-btns a.xu .nm{color:#C9B6F5}.love-btns a.xu .lv{border-color:rgba(155,126,219,.32);color:#BFA9EE}
+.love-btns a .one b{color:var(--brass);font-weight:600;letter-spacing:.08em;margin-right:2px}
+.love-btns a .one.sub{font-size:9px;color:var(--dim)}
+
+/* ===== 点单须知入口 ===== */
+.notice-btn{display:flex;align-items:center;justify-content:center;gap:10px;margin:16px auto 0;max-width:560px;
+  padding:13px 16px;border-radius:10px;border:1px solid var(--brass-lo);color:var(--brass-hi);
+  background:linear-gradient(180deg,rgba(201,168,106,.08),rgba(201,168,106,.02));
+  font-size:14px;letter-spacing:.3em;font-weight:600;transition:transform .3s var(--ease),border-color .3s,background .3s}
+.notice-btn:hover{transform:translateY(-2px);border-color:var(--brass);background:linear-gradient(180deg,rgba(201,168,106,.14),rgba(201,168,106,.04))}
+.notice-btn svg{width:15px;height:15px;flex:none}
+
+/* ===== 点单须知页 · 服务规章 ===== */
+.sub-style{font-size:11px;color:var(--dim);letter-spacing:.1em;margin-top:14px}
+.sub-style b{color:var(--brass);font-weight:600;letter-spacing:.14em}
+.rules{list-style:none;margin:22px auto 0;max-width:560px;display:flex;flex-direction:column;gap:10px}
+.rules li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line-soft);border-radius:10px;
+  background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(9,15,27,.35));
+  font-size:12.5px;color:var(--ivory);line-height:1.75;letter-spacing:.04em}
+.rules li b{flex:none;font-family:var(--serif);font-weight:700;font-size:12px;color:var(--brass);letter-spacing:.12em;padding-top:1px;min-width:22px}
+.notice-links{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px auto 0;max-width:560px}
+.notice-links a{padding:16px 8px;border-radius:10px;border:1px solid var(--line-soft);text-align:center;
+  font-family:var(--serif);font-weight:900;font-size:16px;letter-spacing:.2em;color:var(--ivory);
+  transition:transform .3s var(--ease),border-color .3s,background .3s}
+.notice-links a em{display:block;font-style:normal;font-family:var(--sans);font-size:8.5px;letter-spacing:.3em;color:var(--dim);margin-top:5px;font-weight:400}
+.notice-links a:hover{transform:translateY(-3px)}
+.notice-links a.bing{border-color:rgba(185,86,114,.32);color:#E494A6}.notice-links a.bing:hover{background:rgba(185,86,114,.08)}
+.notice-links a.xu{border-color:rgba(155,126,219,.34);color:#C9B6F5}.notice-links a.xu:hover{background:rgba(155,126,219,.08)}
+
+/* ===== 恋型页 · 卷宗 ===== */
+.love-hero{padding:34px 0 6px;text-align:center}
+.love-hero .dos{font-size:10px;letter-spacing:.34em;color:var(--dim);margin-bottom:16px}
+.love-hero .dos::before,.love-hero .dos::after{content:"·";margin:0 10px;color:var(--brass-lo)}
+.love-hero .moon-mini{width:72px;height:72px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line);background:radial-gradient(circle,rgba(201,168,106,.07),rgba(9,15,27,.5) 70%)}
+.love-hero .moon-mini svg{width:50px;height:50px}
+.love-hero .pk{font-size:11px;letter-spacing:.44em;color:var(--brass)}
+.love-hero h2{font-family:var(--serif);font-weight:900;font-size:clamp(27px,8vw,42px);letter-spacing:.22em;margin-top:8px}
+.love-hero .en{font-size:10.5px;letter-spacing:.38em;color:var(--dim);margin-top:6px}
+.love-hero .sub{max-width:34em;margin:16px auto 0;font-size:14px;color:var(--mist);font-weight:300;line-height:2}
+.quote{max-width:34em;margin:20px auto 0;padding:12px 18px;font-family:var(--serif);font-size:15.5px;line-height:1.9;
+  color:var(--brass-hi);text-align:left;border:1px solid var(--line-soft);border-left:2px solid var(--brass);
+  background:linear-gradient(90deg,rgba(201,168,106,.06),transparent 70%);border-radius:0 8px 8px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.chips span{font-size:11.5px;letter-spacing:.14em;padding:4px 13px;border-radius:3px;border:1px solid var(--line);
+  color:var(--ivory);background:rgba(244,238,223,.045)}
+.fit{max-width:34em;margin:20px auto 0;font-size:13px;color:var(--mist);font-weight:300;line-height:2;text-align:left;
+  border:1px solid var(--line-soft);border-radius:10px;padding:14px 18px;background:rgba(9,15,27,.45)}
+.fit b{color:var(--ivory);font-weight:500}
+.reveal-btn{margin:34px auto 0;max-width:320px;width:100%;padding:15px 0;border-radius:6px;font-size:15px;font-weight:700;
+  letter-spacing:.3em;color:#fff;position:relative;overflow:hidden;
+  transition:transform .3s var(--ease),box-shadow .3s;display:flex;align-items:center;justify-content:center;gap:10px}
+.reveal-btn::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.reveal-btn svg{width:17px;height:17px}
+.reveal-btn.bing{background:linear-gradient(135deg,#D9849B,#B95672 62%,#6E2E45);box-shadow:0 10px 28px rgba(185,86,114,.32)}
+.reveal-btn.xu{background:linear-gradient(135deg,#AF9AE6,#9B7EDB 62%,#5C43A8);box-shadow:0 10px 28px rgba(155,126,219,.34)}
+.reveal-btn:hover{transform:translateY(-3px)}
+.reveal{max-height:0;overflow:hidden;transition:max-height .6s var(--ease);margin:0 auto;max-width:720px}
+.reveal.open{max-height:2200px}
+.reveal .r-in{padding:30px 0 8px}
+.reveal .r-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.r-card{border:1px solid var(--line-soft);border-radius:12px;padding:22px 22px 8px;background:linear-gradient(180deg,rgba(16,26,46,.5),rgba(9,15,27,.35))}
+.r-card h4{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.16em}
+.r-card h4 svg{width:16px;height:16px}
+.r-card .note{font-size:11px;color:var(--dim);margin-top:2px;letter-spacing:.1em}
+.r-card ul{list-style:none;margin-top:12px;padding-bottom:12px}
+.r-card li{position:relative;padding:7px 0 7px 20px;font-size:14px;color:var(--ivory);line-height:1.8;border-bottom:1px dashed var(--line-soft)}
+.r-card li:last-child{border-bottom:none}
+.r-card li::before{content:"";position:absolute;left:0;top:15px;width:6px;height:6px;border-radius:50%}
+.r-card.bing li::before{background:var(--bing)}
+.r-card.xu li::before{background:var(--xu)}
+.r-card .tagline{font-size:13px;color:var(--mist);font-weight:300;margin-top:-4px}
+.r-card .blk{font-size:14px;color:var(--ivory);margin-top:8px}
+.r-card .blk b{color:var(--brass-hi);font-weight:600}
+@media (min-width:768px){
+  .reveal .r-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ===== 进入动画遮罩 · 身份验证 ===== */
+.enter-overlay{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:
+    repeating-linear-gradient(0deg,rgba(201,168,106,.028) 0 1px,transparent 1px 46px),
+    repeating-linear-gradient(90deg,rgba(201,168,106,.028) 0 1px,transparent 1px 46px),
+    radial-gradient(110% 80% at 80% -10%, rgba(63,86,138,.55) 0%, transparent 55%),
+    linear-gradient(180deg,#05080F 0%,#0A1120 45%,#12203C 100%);
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.enter-overlay.active{opacity:1;pointer-events:auto}
+.eo-scan{position:absolute;left:0;right:0;height:130px;top:-160px;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(201,168,106,.13),transparent);
+  animation:scanline 3.2s linear infinite}
+@keyframes scanline{0%{top:-160px}100%{top:110%}}
+.eo-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:0 24px}
+.eo-moon{position:relative;width:94px;height:94px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(201,168,106,.32);background:radial-gradient(circle,rgba(201,168,106,.24),rgba(201,168,106,.05) 60%,transparent 72%);
+  animation:breathe 2.8s ease-in-out infinite}
+.eo-moon::after{content:"";position:absolute;inset:-11px;border:1px dashed rgba(201,168,106,.32);border-radius:50%;animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.eo-moon svg{width:62px;height:62px}
+.eo-step{font-family:var(--serif);font-weight:700;font-size:clamp(17px,4.4vw,21px);letter-spacing:.26em;color:var(--brass-hi);min-height:1.6em}
+.eo-seq{font-size:10.5px;letter-spacing:.4em;color:var(--dim);margin-top:-8px}
+.eo-bar{width:min(300px,74vw);height:2px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(201,168,106,.2) 0 2px,transparent 2px 12px);overflow:hidden}
+.eo-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brass),var(--brass-lo));transition:width .45s var(--ease)}
+.eo-dots{display:flex;gap:14px}
+.eo-dots i{width:8px;height:8px;border-radius:50%;background:rgba(201,168,106,.2);transition:background .3s,box-shadow .3s}
+.eo-dots i.on{background:var(--brass);box-shadow:0 0 12px rgba(201,168,106,.8)}
+.eo-sub{font-size:11px;color:var(--dim);letter-spacing:.26em}
+.eo-ok{display:none;width:52px;height:52px;border-radius:50%;border:1px solid rgba(201,168,106,.55);
+  place-items:center;color:var(--brass-hi);animation:pop .5s var(--ease)}
+.eo-ok.show{display:grid}
+@keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.eo-ok svg{width:26px;height:26px}
+
+/* ===== Toast ===== */
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(16px);opacity:0;pointer-events:none;
+  z-index:70;background:rgba(8,13,24,.96);border:1px solid var(--line);padding:11px 20px;border-radius:8px;
+  font-size:12.5px;color:var(--brass-hi);letter-spacing:.08em;transition:opacity .3s var(--ease),transform .3s var(--ease);max-width:86vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== 启卷页 · 调阅台 ===== */
+.rlinks{display:grid;grid-template-columns:1fr;gap:13px;max-width:560px;margin:28px auto 0;counter-reset:rl}
+.rlinks button{display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:15px 18px;
+  border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,rgba(15,24,44,.55),rgba(9,15,27,.4));
+  transition:transform .3s var(--ease),border-color .3s,background .3s;overflow:hidden;position:relative}
+.rlinks button::before{counter-increment:rl;content:"0" counter(rl);flex:none;width:38px;text-align:center;
+  font-family:var(--serif);font-weight:700;font-size:21px;color:var(--brass-lo);letter-spacing:.06em}
+.rlinks button:hover{transform:translateY(-2px)}
+.rlinks .rl-ic{width:42px;height:42px;border-radius:10px;border:1px solid var(--line-soft);display:grid;place-items:center;flex:none}
+.rlinks .rl-ic svg{width:20px;height:20px}
+.rlinks button.bing:hover{border-color:rgba(185,86,114,.55)}.rlinks button.bing .rl-ic{background:rgba(185,86,114,.14);color:#E494A6}
+.rlinks button.xu:hover{border-color:rgba(155,126,219,.55)}.rlinks button.xu .rl-ic{background:rgba(155,126,219,.15);color:#C9B6F5}
+.rlinks .rl-tx{flex:1;min-width:0}
+.rlinks .rl-tx b{display:block;font-family:var(--serif);font-weight:700;font-size:16px;letter-spacing:.2em}
+.rlinks .rl-tx em{display:block;font-style:normal;font-size:12px;color:var(--mist);font-weight:300;margin-top:3px;line-height:1.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rlinks .rl-go{width:16px;height:16px;flex:none;color:var(--brass-lo);transition:transform .3s var(--ease),color .3s}
+.rlinks button:hover .rl-go{transform:translateX(4px);color:var(--brass-hi)}
+.rlinks-note{max-width:560px;margin:18px auto 0;font-size:11px;color:var(--dim);text-align:center;letter-spacing:.1em;
+  border-top:1px dashed var(--line-soft);padding-top:14px;line-height:1.9}
+
+/* ===== FOOTER ===== */
+footer{padding:30px 20px 0;text-align:center;border-top:1px solid var(--line-soft);margin-top:42px}
+.bureau{font-size:10px;letter-spacing:.4em;color:var(--dim);margin-bottom:12px}
+
+/* ===== 悬浮音乐按钮 ===== */
+.mus-fab{position:fixed;right:16px;bottom:20px;z-index:40;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line);background:rgba(8,13,24,.86);color:var(--brass-hi);
+  box-shadow:0 8px 24px rgba(0,0,0,.45), inset 0 0 0 1px rgba(201,168,106,.08);transition:transform .25s}
+.mus-fab:hover{transform:scale(1.06)}
+.mus-fab svg{width:19px;height:19px}
+.mus-fab .spin{animation:spin 6s linear infinite}
+
+/* ===== 移动端 ===== */
+@media (max-width:520px){
+  .pcard .row{grid-template-columns:96px 1fr;padding:13px 16px}
+  .love-btns{grid-template-columns:repeat(2,1fr);gap:8px}
+  .love-btns a{padding:20px 6px 16px;gap:6px}
+  .love-btns a .nm{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="topNav" data-view="home">
+  <a class="back" id="btnBack" href="#view-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5 8 12l7 7"/></svg>
+    回月亮
+  </a>
+  <span class="tt">月下 · 三恋档案</span>
+  <span class="fno" aria-hidden="true">FILE NO. ML-2026-001</span>
+</nav>
+
+<!-- ===== 进入动画遮罩：检测 / 验证 / 验证成功 ===== -->
+<div class="enter-overlay" id="enterOverlay" aria-hidden="true">
+  <i class="eo-scan" aria-hidden="true"></i>
+  <div class="eo-in">
+    <div class="eo-moon" aria-hidden="true">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" fill="url(#moonGrad)"/>
+        <circle cx="38" cy="38" r="8" fill="#C98E4B" opacity=".5"/>
+        <circle cx="60" cy="58" r="5" fill="#C98E4B" opacity=".42"/>
+        <circle cx="46" cy="70" r="4" fill="#C98E4B" opacity=".46"/>
+      </svg>
+    </div>
+    <div class="eo-step" id="eoStep">检测中 · 星轨校准</div>
+    <div class="eo-seq" id="eoSeq" aria-hidden="true">01 / 03</div>
+    <div class="eo-bar"><i id="eoBar"></i></div>
+    <div class="eo-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="eo-ok" id="eoOk">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+    </div>
+    <div class="eo-sub" id="eoSub">正在访问「月下档案」</div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== 视图：月亮首页 ===== -->
+<section class="view active" id="view-home">
+  <div class="view-in">
+    <div class="stars" id="starfield"></div>
+    <svg width="0" height="0" aria-hidden="true">
+      <defs>
+        <radialGradient id="moonGrad" cx="38%" cy="34%" r="80%">
+          <stop offset="0%" stop-color="#FDF3DC"/>
+          <stop offset="55%" stop-color="#E9B96B"/>
+          <stop offset="100%" stop-color="#C98E4B"/>
+        </radialGradient>
+      </defs>
+    </svg>
+    <button class="moon-btn" id="btnMoon" type="button" aria-label="点击月亮，验证身份，翻开档案">
+      <span class="glow" aria-hidden="true"></span>
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="ring2" cx="100" cy="100" r="104"/>
+        <circle class="ring" cx="100" cy="100" r="97" stroke-dasharray="1 6.1"/>
+        <g class="cross"><path d="M100 1v199M1 100h199"/></g>
+        <circle class="mfill" cx="100" cy="100" r="86"/>
+        <circle class="crate" cx="76" cy="72" r="16"/>
+        <circle class="crate2" cx="122" cy="112" r="11"/>
+        <circle class="crate" cx="94" cy="140" r="8"/>
+        <circle class="crate2" cx="134" cy="62" r="6"/>
+        <circle class="crate" cx="70" cy="120" r="5"/>
+      </svg>
+    </button>
+    <div class="home-kicker">LUNAR ARCHIVE · DOSSIER</div>
+    <h1 class="home-title">三恋档案</h1>
+    <p class="home-sub">一个人的双面月亮</p>
+    <p class="home-lv">月光认证 <b>LEVEL Ⅲ</b> · 限本人调阅</p>
+    <span class="home-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v9m0 0-4-4m4 4 4-4"/><path d="M5 13.5A7 7 0 0 0 19 13.5"/></svg>
+      点击月亮 · 验证身份
+    </span>
+    <div class="music-note" id="musicNote" role="status">
+      <span class="dotp" aria-hidden="true"></span>
+      <span id="musicNoteTxt">背景音乐：邓紫棋《自由的你》</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：个人信息 ===== -->
+<section class="view" id="view-profile">
+  <div class="view-in wrap">
+    <div class="phead">
+      <div class="pk">DOSSIER FORM · 01</div>
+      <h2>个人信息</h2>
+    </div>
+    <div class="pcard">
+      <div class="row"><div class="k">名字</div><div class="v" id="f-name">月泠叙</div></div>
+      <div class="row"><div class="k">年龄</div><div class="v" id="f-age">18</div></div>
+      <div class="row"><div class="k">属性</div><div class="v" id="f-attr">18 ｜ le ｜ 八无 ｜ intj ｜ h</div></div>
+      <div class="row"><div class="k">常驻团</div><div class="v" id="f-team">无</div></div>
+      <div class="row"><div class="k">常驻装扮</div><div class="v" id="f-skin">虚荣 / 初始二级白</div></div>
+    </div>
+    <p class="pnote"><b>档案状态：有效</b> · 登记日期：2026-10-14</p>
+    <a class="notice-btn" href="#view-notice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"/><path d="M9 8h6M9 12h6"/></svg>
+      <span>点单须知</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+    </a>
+
+    <div class="section-title">
+      <div class="pk">LOVE PROFILE · 双面</div>
+      <h3>关于我的三恋风格</h3>
+      <p>同一个月亮，两种爱法。选一面，看看月色下的我。</p>
+    </div>
+    <div class="love-btns">
+      <a class="bing" href="#view-love-bing">
+        <div class="halo" aria-hidden="true"></div>
+        <span class="case-no" aria-hidden="true">CASE-01</span>
+        <span class="lv" aria-hidden="true">Ⅲ</span>
+        <span class="nm">病恋</span><span class="en">YANDERE</span>
+        <span class="one"><b>主</b>高压 ｜ 微钓系 ｜ 微逻辑加剖析 ｜ 白话</span>
+        <span class="one sub"><b>副</b>温病 ｜ 高恋 ｜ 微文艺 ｜ 引导 ｜ 诡辩 ｜ 低无</span>
+      </a>
+      <a class="xu" href="#view-love-xu">
+        <div class="halo" aria-hidden="true"></div>
+        <span class="case-no" aria-hidden="true">CASE-02</span>
+        <span class="lv" aria-hidden="true">Ⅲ</span>
+        <span class="nm">虚恋</span><span class="en">DREAM</span>
+        <span class="one"><b>主</b>引导 ｜ 高恋 ｜ 微钓系</span>
+        <span class="one sub"><b>副</b>微文艺</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：恋型页 · 病恋 ===== -->
+<section class="view" id="view-love-bing">
+  <div class="view-in wrap">
+    <div class="love-hero">
+      <div class="moon-mini" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="#C6536B" opacity=".9"/>
+          <circle cx="38" cy="38" r="8" fill="#7E2F44" opacity=".6"/>
+          <circle cx="60" cy="58" r="5" fill="#7E2F44" opacity=".5"/>
+          <circle cx="46" cy="70" r="4" fill="#7E2F44" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="dos">DOSSIER NO. ML-002 · 红月面</div>
+      <div class="pk">YANDERE · RED MOON</div>
+      <h2 style="color:#E88BA0">病恋</h2>
+      <div class="en">一个人的偏执面</div>
+      <p class="sub">月色偏红的那一晚，我只想独占你的视线。上线第一件事是找你，别人碰你会让我心口发烫。别担心，我的占有有分寸——但你最好每天先来找我。</p>
+      <p class="quote">「你只能是我一个人的月亮。」</p>
+      <div class="chips"><span>高压</span><span>微钓系</span><span>逻辑剖析</span><span>白话</span></div>
+      <div class="sub-style"><b>副风格</b> · 温病 ｜ 高恋 ｜ 微文艺 ｜ 引导 ｜ 诡辩 ｜ 低无</div>
+      <p class="fit"><b>适合：</b>想要极致唯一感、喜欢被强烈需要的人。<br><b>相处提示：</b>每天上线先找我，并明确告诉我你是我的。别人靠近你时，记得握住我的手。</p>
+    </div>
+    <a class="reveal-btn bing" href="#view-reveal-bing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v14m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+      <span>启卷见我</span>
+    </a>
+  </div>
+</section>
+
+<!-- ===== 视图：恋型页 · 虚恋 ===== -->
+<section class="view" id="view-love-xu">
+  <div class="view-in wrap">
+    <div class="love-hero">
+      <div class="moon-mini" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="#A78BFA" opacity=".9"/>
+          <circle cx="38" cy="38" r="8" fill="#6D4FC4" opacity=".6"/>
+          <circle cx="60" cy="58" r="5" fill="#6D4FC4" opacity=".5"/>
+          <circle cx="46" cy="70" r="4" fill="#6D4FC4" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="dos">DOSSIER NO. ML-004 · 紫月面</div>
+      <div class="pk">DREAM · PURPLE MOON</div>
+      <h2 style="color:#C4B2FC">虚恋</h2>
+      <div class="en">一个人的幻梦面</div>
+      <p class="sub">月色泛紫的梦里，我像一阵抓不住的风。我会陪你玩到很晚，也会在某天忽然安静——不是离开，只是梦快醒了。别怕，醒来之前，我把月光都留给你。</p>
+      <p class="quote">「我像一场梦，醒来就抓不住了。」</p>
+      <div class="chips"><span>引导</span><span>高恋</span><span>微钓系</span></div>
+      <div class="sub-style"><b>副风格</b> · 微文艺</div>
+      <p class="fit"><b>适合：</b>喜欢梦幻感、能接受留白结局的人。<br><b>相处提示：</b>多看我几眼。梦醒之前，我们还有很长一段月色要一起走。</p>
+    </div>
+    <a class="reveal-btn xu" href="#view-reveal-xu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v14m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+      <span>启卷见我</span>
+    </a>
+  </div>
+</section>
+
+<!-- ===== 视图：启卷页 · 病恋 ===== -->
+<section class="view" id="view-reveal-bing">
+  <div class="view-in wrap">
+    <div class="love-hero">
+      <div class="moon-mini" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="#C6536B" opacity=".9"/>
+          <circle cx="38" cy="38" r="8" fill="#7E2F44" opacity=".6"/>
+          <circle cx="60" cy="58" r="5" fill="#7E2F44" opacity=".5"/>
+          <circle cx="46" cy="70" r="4" fill="#7E2F44" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="dos">RETRIEVAL REQ. R-002 · 红月面</div>
+      <div class="pk">REVEAL · 病恋</div>
+      <h2 style="color:#E88BA0">启卷见我</h2>
+      <div class="en">病恋 · 红月面的三页卷宗</div>
+      <p class="sub">三页卷宗，分别藏着我话术、头牌与板评。点击对应板块，直达它的专属页面。</p>
+    </div>
+    <div class="rlinks">
+      <button class="rl bing" type="button" data-url="https://www.kdocs.cn/l/clM9XNJAY83b">
+        <span class="rl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span>
+        <span class="rl-tx"><b>话术</b><em>「上线了，怎么不先来找我？」</em></span>
+        <svg class="rl-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+      </button>
+      <button class="rl bing" type="button" data-url="https://www.kdocs.cn/l/cp4sF5C0X4TV">
+        <span class="rl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.4 5.2 5.6.7-4.1 4 1 5.6L12 15.9 7.1 18.5l1-5.6-4.1-4 5.6-.7z"/></svg></span>
+        <span class="rl-tx"><b>头牌</b><em>红月头牌 · 仅接一人 · 满星好评</em></span>
+        <svg class="rl-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+      </button>
+      <button class="rl bing" type="button" data-empty="1">
+        <span class="rl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V8l8-5 8 5v13M9 21v-6h6v6"/></svg></span>
+        <span class="rl-tx"><b>板评</b><em>—— 暂无 ——</em></span>
+        <svg class="rl-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+      </button>
+    </div>
+    <p class="rlinks-note">话术与头牌卡已配置外链，板评暂无。</p>
+  </div>
+</section>
+
+<!-- ===== 视图：启卷页 · 虚恋 ===== -->
+<section class="view" id="view-reveal-xu">
+  <div class="view-in wrap">
+    <div class="love-hero">
+      <div class="moon-mini" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="#A78BFA" opacity=".9"/>
+          <circle cx="38" cy="38" r="8" fill="#6D4FC4" opacity=".6"/>
+          <circle cx="60" cy="58" r="5" fill="#6D4FC4" opacity=".5"/>
+          <circle cx="46" cy="70" r="4" fill="#6D4FC4" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="dos">RETRIEVAL REQ. R-004 · 紫月面</div>
+      <div class="pk">REVEAL · 虚恋</div>
+      <h2 style="color:#C4B2FC">启卷见我</h2>
+      <div class="en">虚恋 · 紫月面的三页卷宗</div>
+      <p class="sub">三页卷宗，分别藏着我话术、头牌与板评。点击对应板块，直达它的专属页面。</p>
+    </div>
+    <div class="rlinks">
+      <button class="rl xu" type="button" data-url="https://www.kdocs.cn/l/clM9XNJAY83b">
+        <span class="rl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span>
+        <span class="rl-tx"><b>话术</b><em>「你今晚梦到我了吗？」</em></span>
+        <svg class="rl-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+      </button>
+      <button class="rl xu" type="button" data-url="https://www.kdocs.cn/l/cp4sF5C0X4TV">
+        <span class="rl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.4 5.2 5.6.7-4.1 4 1 5.6L12 15.9 7.1 18.5l1-5.6-4.1-4 5.6-.7z"/></svg></span>
+        <span class="rl-tx"><b>头牌</b><em>紫月头牌 · 梦境感陪伴 · 五星</em></span>
+        <svg class="rl-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+      </button>
+      <button class="rl xu" type="button" data-empty="1">
+        <span class="rl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V8l8-5 8 5v13M9 21v-6h6v6"/></svg></span>
+        <span class="rl-tx"><b>板评</b><em>—— 暂无 ——</em></span>
+        <svg class="rl-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg>
+      </button>
+    </div>
+    <p class="rlinks-note">话术与头牌卡已配置外链，板评暂无。</p>
+  </div>
+</section>
+
+<!-- ===== 视图：点单须知 ===== -->
+<section class="view" id="view-notice">
+  <div class="view-in wrap">
+    <div class="love-hero">
+      <div class="moon-mini" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="#C9A86A" opacity=".9"/>
+          <circle cx="38" cy="38" r="8" fill="#7A5F2E" opacity=".6"/>
+          <circle cx="60" cy="58" r="5" fill="#7A5F2E" opacity=".5"/>
+          <circle cx="46" cy="70" r="4" fill="#7A5F2E" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="dos">DOSSIER NO. ML-005 · 服务规章</div>
+      <div class="pk">SERVICE RULES · 点单须知</div>
+      <h2 style="color:#E6CD9C">点单须知</h2>
+      <div class="en">月泠叙 · 陪玩服务规章</div>
+      <p class="sub">共 13 条服务规章。逐条确认无误后，再选择你想见的那一面。</p>
+    </div>
+    <ol class="rules">
+      <li><b>01</b>单前请告诉我雷点和个人喜好，否则在涉雷时不给予退款。</li>
+      <li><b>02</b>不接待男老板。</li>
+      <li><b>03</b>拒绝抽象、反驳型人格、无意义、血暴、h 和骂人行为。</li>
+      <li><b>04</b>如果抱着看笑话的心态就请离开，无疑会让您自己受到伤害。</li>
+      <li><b>05</b>低无互病请您跟我说一声，拒绝拼刺刀。</li>
+      <li><b>06</b>非低无默认上线就是恋人身份（不是麻烦说一声），上线即开始，我不想有其他人打扰你我的约会。</li>
+      <li><b>07</b>雷点提前告知，不然踩暗雷概不负责。</li>
+      <li><b>08</b>我或许会称呼您为「爱人」「亲爱的」「您」，如有不满请您说「可以换一个称呼吗」，我会立刻调整到您舒适的方向。</li>
+      <li><b>09</b>录屏截屏请告知我，不希望在我不曾知晓和同意的情况下外传。</li>
+      <li><b>10</b>单内话术禁止抄袭 / 传播 / 模仿。</li>
+      <li><b>11</b>不满意请在规定时间内叫停，不然不退不换。</li>
+      <li><b>12</b>无手感不接。</li>
+      <li><b>13</b>不接连麦。</li>
+    </ol>
+    <div class="section-title">
+      <div class="pk">CHOOSE · ONE FACE</div>
+      <h3>选择你要见的一面</h3>
+      <p>两条路径，两面月色，点选其一进入。</p>
+    </div>
+    <div class="notice-links">
+      <a class="bing" href="#view-love-bing">病恋<em>YANDERE</em></a>
+      <a class="xu" href="#view-love-xu">虚恋<em>DREAM</em></a>
+    </div>
+  </div>
+</section>
+
+<footer style="display:none" id="siteFooter">
+  <div class="bureau">◆ LUNAR ARCHIVE BUREAU · 月下档案所 ◆</div>
+</footer>
+
+<button class="mus-fab" id="btnMusic" type="button" aria-label="背景音乐开关">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+    <path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>
+  </svg>
+</button>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ===== 音乐配置 =====
+     已填入背景音乐直链（网易云音乐官方外链：Max李玄《明知故犯》），页面打开即尝试自动播放；
+     若被浏览器拦截，点击页面任意处会再次尝试；右下角音符可手动暂停/开启。 */
+  var MUSIC_URL = "https://music.163.com/song/media/outer/url?id=3342319503.mp3";
+  var MUSIC_AUTOPLAY = true;
+
+  var audio = new Audio();
+  audio.loop = true;
+  audio.volume = 0.4;
+  var audioReady = false, audioBlocked = false;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var note = $("musicNote"), noteTxt = $("musicNoteTxt"), btnMusic = $("btnMusic");
+
+  function setNote(txt, state){
+    noteTxt.textContent = txt;
+    note.className = "music-note" + (state === "playing" ? " playing" : state === "playable" ? " playable" : "");
+  }
+  function tryPlay(){
+    if(!MUSIC_URL) return;
+    if(!audioReady){ audio.src = MUSIC_URL; audioReady = true; }
+    var p = audio.play();
+    if(p && p.then){
+      p.then(function(){ setNote("背景音乐：Max李玄《明知故犯》 · 播放中", "playing"); })
+       .catch(function(){
+         audioBlocked = true;
+         setNote("点击开启 · Max李玄《明知故犯》", "playable");
+       });
+    }
+  }
+  if(MUSIC_URL && MUSIC_AUTOPLAY && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){ tryPlay(); }
+  if(!MUSIC_URL){ setNote("背景音乐：待配置（链接留空）", ""); }
+
+  document.addEventListener("click", function(){
+    if(MUSIC_URL && audioBlocked){ tryPlay(); }
+  }, {once:false});
+
+  btnMusic.addEventListener("click", function(){
+    if(!MUSIC_URL){ setNote("背景音乐：待配置，填入链接后自动播放", ""); return; }
+    if(audio.paused){ tryPlay(); }
+    else { audio.pause(); setNote("背景音乐：已暂停 · Max李玄《明知故犯》", "playable"); }
+  });
+  note.addEventListener("click", function(){
+    if(!MUSIC_URL) return;
+    if(audio.paused){ tryPlay(); }
+    else { audio.pause(); setNote("背景音乐：已暂停 · Max李玄《明知故犯》", "playable"); }
+  });
+  audio.addEventListener("play", function(){ setNote("背景音乐：Max李玄《明知故犯》 · 播放中", "playing"); });
+  audio.addEventListener("pause", function(){ if(audioReady && !audio.paused){} });
+
+  /* ===== 星空 ===== */
+  (function(){
+    var box = $("starfield"); if(!box) return;
+    var n = window.innerWidth < 768 ? 52 : 84;
+    var frag = document.createDocumentFragment();
+    for(var i = 0; i < n; i++){
+      var s = document.createElement("i");
+      s.style.left = (Math.random() * 96).toFixed(2) + "%";
+      s.style.top = (Math.random() * 90).toFixed(2) + "%";
+      s.style.animationDelay = (Math.random() * 3.4 + 1.2).toFixed(2) + "s";
+      s.style.animationDuration = (Math.random() * 2.4 + 2.6).toFixed(2) + "s";
+      if(Math.random() < 0.16){ s.style.width = "3px"; s.style.height = "3px"; }
+      frag.appendChild(s);
+    }
+    box.appendChild(frag);
+  })();
+
+  /* ===== 路由 ===== */
+  var views = ["view-home","view-profile","view-notice","view-love-bing","view-love-xu","view-reveal-bing","view-reveal-xu"];
+  function showView(id){
+    views.forEach(function(v){
+      var el = $(v);
+      if(el){ el.classList.toggle("active", v === id); }
+    });
+    var nav = $("topNav");
+    nav.setAttribute("data-view", id === "view-home" ? "home" : "inner");
+    var foot = $("siteFooter");
+    if(foot){ foot.style.display = (id === "view-home") ? "none" : "block"; }
+    var back = $("btnBack");
+    if(id === "view-home"){ /* home 下由 CSS 隐藏 */ }
+    else if(id === "view-profile"){ back.setAttribute("href","#view-home"); back.textContent = "回月亮"; }
+    else if(id === "view-notice"){ back.setAttribute("href","#view-profile"); back.textContent = "回档案"; }
+    else if(id.indexOf("view-reveal-") === 0){ back.setAttribute("href","#" + id.replace("view-reveal-","view-love-")); back.textContent = "回档案"; }
+    else { back.setAttribute("href","#view-profile"); back.textContent = "回档案"; }
+    window.scrollTo({top:0, behavior:"auto"});
+  }
+  function route(){
+    var h = (location.hash || "#view-home").replace("#","");
+    var id = (h.indexOf("view-") === 0) ? h : "view-" + h;
+    if(views.indexOf(id) < 0){ id = "view-home"; }
+    showView(id);
+  }
+  window.addEventListener("hashchange", route);
+  route();
+
+  /* ===== 月亮点击 → 进入动画 ===== */
+  var ENTER_STEPS = [
+    {t:"检测中 · 星轨校准", d:760},
+    {t:"验证中 · 权限确认", d:860},
+    {t:"验证成功 · 档案解锁", d:620}
+  ];
+  var eoOverlay = $("enterOverlay"), eoStep = $("eoStep"), eoBar = $("eoBar"), eoOk = $("eoOk"), eoSeq = $("eoSeq");
+  var eoDots = eoOverlay.querySelectorAll(".eo-dots i");
+  var eoTimer = null;
+  function resetEnter(){
+    eoStep.textContent = ENTER_STEPS[0].t;
+    eoSeq.textContent = "01 / 03";
+    eoBar.style.width = "0%";
+    eoOk.classList.remove("show");
+    eoDots.forEach(function(d){ d.classList.remove("on"); });
+  }
+  function runEnter(){
+    var fast = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    resetEnter();
+    eoOverlay.classList.add("active");
+    eoOverlay.setAttribute("aria-hidden","false");
+    clearTimeout(eoTimer);
+    var step = 0;
+    (function go(){
+      if(step >= ENTER_STEPS.length){
+        eoOk.classList.add("show");
+        eoStep.textContent = "验证成功 · 档案解锁";
+        eoTimer = setTimeout(function(){
+          eoOverlay.classList.remove("active");
+          eoOverlay.setAttribute("aria-hidden","true");
+          resetEnter();
+          location.hash = "#view-profile";
+        }, fast ? 80 : 620);
+        return;
+      }
+      var s = ENTER_STEPS[step];
+      eoStep.textContent = s.t;
+      eoSeq.textContent = "0" + (step + 1) + " / 03";
+      eoDots[step].classList.add("on");
+      eoBar.style.width = ((step + 1) / ENTER_STEPS.length * 100).toFixed(1) + "%";
+      step++;
+      eoTimer = setTimeout(go, fast ? 40 : s.d);
+    })();
+  }
+  $("btnMoon").addEventListener("click", function(){ runEnter(); });
+
+  /* ===== 启卷页：板块外链按钮（data-url 打开外链，data-empty 显示暂无） ===== */
+  var toastEl = $("toast"), toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2400);
+  }
+  document.querySelectorAll(".rl").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var empty = btn.getAttribute("data-empty");
+      var url = (btn.getAttribute("data-url") || "").trim();
+      var nameEl = btn.querySelector(".rl-tx b");
+      var name = nameEl ? nameEl.textContent : "该板块";
+      if(empty){ toast("「" + name + "」暂无"); return; }
+      if(url){ window.open(url, "_blank", "noopener"); }
+      else { toast("「" + name + "」链接待配置（data-url 为空）"); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
